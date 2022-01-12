@@ -1,0 +1,873 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+      "title": "Library Management System 2.0",
+      "description": "This is a sample API spec for a library management system with brand new features.",
+      "version": "2.0.0"
+    },
+    "servers": [
+      {
+        "url": "/"
+      }
+    ],
+    "tags": [
+      {
+        "name": "Books",
+        "description": "Details about the book at the library"
+      },
+      {
+        "name": "Students",
+        "description": "Details about the students at the library"
+      },
+      {
+        "name": "Loans",
+        "description": "Details about various loans given out"
+      }
+    ],
+    "paths": {
+      "/books": {
+        "get": {
+          "tags": [
+            "Books"
+          ],
+          "summary": "gets all the books in the database",
+          "operationId": "getAllBooks",
+          "responses": {
+            "200": {
+              "description": "Operation successful",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/FullBook"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Books"
+          ],
+          "summary": "Adds a new book the catalogue",
+          "description": "Use this to add a new book the existing collection",
+          "operationId": "addBook",
+          "requestBody": {
+            "description": "Book that needs to be added to the store",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Book successfully added",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FullBook"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Invalid input",
+              "content": {}
+            }
+          },
+          "x-codegen-request-body-name": "body"
+        }
+      },
+      "/book/{bookId}": {
+        "get": {
+          "tags": [
+            "Books"
+          ],
+          "summary": "Get details about the book that matches the ID inputed",
+          "operationId": "getBookById",
+          "parameters": [
+            {
+              "name": "bookId",
+              "in": "path",
+              "description": "Id of book that needs to be fetched",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FullBook"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid ID supplied",
+              "content": {}
+            },
+            "404": {
+              "description": "book not found",
+              "content": {}
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Books"
+          ],
+          "summary": "Update the details or availability of an existing book by ID",
+          "operationId": "updateBook",
+          "parameters": [
+            {
+              "name": "bookId",
+              "in": "path",
+              "description": "Book that needs to be updated",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "Add the dates here",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Book successfully updated",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/FullBook"
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid ID supplied",
+              "content": {}
+            },
+            "404": {
+              "description": "Book not found",
+              "content": {}
+            },
+            "405": {
+              "description": "Validation exception",
+              "content": {}
+            }
+          },
+          "x-codegen-request-body-name": "body"
+        },
+        "delete": {
+          "tags": [
+            "Books"
+          ],
+          "summary": "delete the book by ID",
+          "operationId": "deleteBookById",
+          "parameters": [
+            {
+              "name": "bookId",
+              "in": "path",
+              "description": "Id of book that needs to be fetched",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Book is deleted successfully",
+              "content": {}
+            },
+            "400": {
+              "description": "Invalid ID supplied",
+              "content": {}
+            },
+            "404": {
+              "description": "Book not found",
+              "content": {}
+            }
+          }
+        }
+      },
+      "/books/{bookId}/history": {
+        "get": {
+          "tags": [
+            "Books",
+            "Loans"
+          ],
+          "summary": "Get the loan history of a book",
+          "operationId": "getBookHistory",
+          "parameters": [
+            {
+              "name": "bookId",
+              "in": "path",
+              "description": "Id of book for which history is needed",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successfully fetched the list",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/LoanBookHistory"
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Book not found",
+              "content": {}
+            },
+            "405": {
+              "description": "Invalid input",
+              "content": {}
+            }
+          }
+        }
+      },
+      "/student": {
+        "get": {
+          "tags": [
+            "Students"
+          ],
+          "summary": "Gets the list of all the users",
+          "operationId": "getAllPerson",
+          "responses": {
+            "200": {
+              "description": "Successfully fetched the list",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/FullPerson"
+                    }
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Invalid input",
+              "content": {}
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Students"
+          ],
+          "summary": "Adds a new student to the database",
+          "requestBody": {
+            "description": "Student that needs to be added to the store",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Person"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Book successfully added",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FullPerson"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Invalid input",
+              "content": {}
+            }
+          },
+          "x-codegen-request-body-name": "body"
+        }
+      },
+      "/student/{studentId}": {
+        "get": {
+          "tags": [
+            "Students"
+          ],
+          "summary": "Get details about the customer",
+          "operationId": "getPersonById",
+          "parameters": [
+            {
+              "name": "studentId",
+              "in": "path",
+              "description": "Id of student that needs to be fetched",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FullPerson"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid ID supplied",
+              "content": {}
+            },
+            "404": {
+              "description": "Student not found",
+              "content": {}
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Students"
+          ],
+          "summary": "Updates details about a student",
+          "operationId": "updatePersonById",
+          "parameters": [
+            {
+              "name": "studentId",
+              "in": "path",
+              "description": "Id of book that needs to be fetched",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Person"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FullPerson"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid ID supplied",
+              "content": {}
+            },
+            "404": {
+              "description": "Student not found",
+              "content": {}
+            }
+          },
+          "x-codegen-request-body-name": "body"
+        },
+        "delete": {
+          "tags": [
+            "Students"
+          ],
+          "summary": "Get details about the customer",
+          "operationId": "deletePersonById",
+          "parameters": [
+            {
+              "name": "studentId",
+              "in": "path",
+              "description": "Id of book that needs to be fetched",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {}
+            },
+            "400": {
+              "description": "Invalid ID supplied",
+              "content": {}
+            },
+            "404": {
+              "description": "Student not found",
+              "content": {}
+            }
+          }
+        }
+      },
+      "/student/{studentId}/history": {
+        "get": {
+          "tags": [
+            "Students",
+            "Loans"
+          ],
+          "summary": "Get the loan history of a student",
+          "operationId": "getStudentHistory",
+          "parameters": [
+            {
+              "name": "studentId",
+              "in": "path",
+              "description": "Id of student whose history is needed",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successfully fetched the list",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/LoanStudentHistory"
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Student not found",
+              "content": {}
+            },
+            "405": {
+              "description": "Invalid input",
+              "content": {}
+            }
+          }
+        }
+      },
+      "/loanHistory": {
+        "get": {
+          "tags": [
+            "Loans"
+          ],
+          "summary": "Get details about all the books that were lent by the students",
+          "operationId": "getAllLoans",
+          "responses": {
+            "200": {
+              "description": "Successfully fetched the list",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Loan"
+                    }
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Invalid input",
+              "content": {}
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Loans"
+          ],
+          "summary": "Add a new loan",
+          "operationId": "addNewLoan",
+          "requestBody": {
+            "description": "Loan that needs to be added to the store",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoanPartial"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Loan successfully added",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Loan"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Invalid input",
+              "content": {}
+            }
+          },
+          "x-codegen-request-body-name": "body"
+        }
+      },
+      "/loanHistory/{loanId}": {
+        "get": {
+          "tags": [
+            "Loans"
+          ],
+          "summary": "Get loan details by id",
+          "operationId": "getLoanById",
+          "parameters": [
+            {
+              "name": "loanId",
+              "in": "path",
+              "description": "Id of loan that needs to be fetched",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Loan"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid ID supplied",
+              "content": {}
+            },
+            "404": {
+              "description": "Loan not found",
+              "content": {}
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Loans"
+          ],
+          "summary": "To edit details of a loan",
+          "operationId": "editLoanById",
+          "parameters": [
+            {
+              "name": "loanId",
+              "in": "path",
+              "description": "Id of loan that needs to be fetched",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoanPartial"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Loan"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid ID supplied",
+              "content": {}
+            },
+            "404": {
+              "description": "Loan not found",
+              "content": {}
+            }
+          },
+          "x-codegen-request-body-name": "body"
+        },
+        "delete": {
+          "tags": [
+            "Loans"
+          ],
+          "summary": "Delete a loan from the database",
+          "operationId": "deleteLoanById",
+          "parameters": [
+            {
+              "name": "loanId",
+              "in": "path",
+              "description": "Id of loan that needs to be deleted",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {}
+            },
+            "400": {
+              "description": "Invalid ID supplied",
+              "content": {}
+            },
+            "404": {
+              "description": "Loan not found",
+              "content": {}
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "FullBook": {
+          "type": "object",
+          "properties": {
+            "bookId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "bookTitle": {
+              "type": "string",
+              "example": "Ice and Fire"
+            },
+            "bookAuthor": {
+              "type": "string",
+              "example": "Archer"
+            },
+            "bookStatus": {
+              "type": "boolean"
+            }
+          }
+        },
+        "Book": {
+          "type": "object",
+          "properties": {
+            "bookTitle": {
+              "type": "string",
+              "example": "Ice and Fire"
+            },
+            "bookAuthor": {
+              "type": "string",
+              "example": "Archer"
+            },
+            "bookStatus": {
+              "type": "boolean",
+              "description": "availability of book in library"
+            }
+          }
+        },
+        "FullPerson": {
+          "type": "object",
+          "properties": {
+            "studentId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "studentName": {
+              "type": "string",
+              "example": "John"
+            }
+          }
+        },
+        "Person": {
+          "type": "object",
+          "properties": {
+            "studentName": {
+              "type": "string",
+              "example": "John"
+            }
+          }
+        },
+        "Loan": {
+          "type": "object",
+          "properties": {
+            "loanId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "bookId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "studentId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "outDate": {
+              "type": "string",
+              "description": "Date on which the book was loaned out",
+              "format": "date",
+              "example": "2020-03-22T00:00:00.000Z"
+            },
+            "returnDate": {
+              "type": "string",
+              "description": "Date on which the book was loaned out",
+              "format": "date",
+              "example": "2020-03-22T00:00:00.000Z"
+            }
+          }
+        },
+        "LoanPartial": {
+          "type": "object",
+          "properties": {
+            "bookId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "studentId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "outDate": {
+              "type": "string",
+              "description": "Date on which the book was loaned out",
+              "format": "date",
+              "example": "2020-03-22T00:00:00.000Z"
+            },
+            "returnDate": {
+              "type": "string",
+              "description": "Date on which the book was loaned out",
+              "format": "date",
+              "example": "2020-03-22T00:00:00.000Z"
+            }
+          }
+        },
+        "LoanBookHistory": {
+          "type": "object",
+          "properties": {
+            "loanId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "student": {
+              "type": "object",
+              "properties": {
+                "studentId": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "studentName": {
+                  "type": "string",
+                  "example": "John"
+                }
+              }
+            },
+            "outDate": {
+              "type": "string",
+              "description": "Date on which the book was loaned out",
+              "format": "date",
+              "example": "2020-03-22T00:00:00.000Z"
+            },
+            "returnDate": {
+              "type": "string",
+              "description": "Date on which the book was loaned out",
+              "format": "date",
+              "example": "2020-03-22T00:00:00.000Z"
+            }
+          }
+        },
+        "LoanStudentHistory": {
+          "type": "object",
+          "properties": {
+            "loanId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "book": {
+              "type": "object",
+              "properties": {
+                "bookId": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "bookTitle": {
+                  "type": "string",
+                  "example": "Ice and Fire"
+                },
+                "bookAuthor": {
+                  "type": "string",
+                  "example": "Archer"
+                }
+              }
+            },
+            "outDate": {
+              "type": "string",
+              "description": "Date on which the book was loaned out",
+              "format": "date",
+              "example": "2020-03-22T00:00:00.000Z"
+            },
+            "returnDate": {
+              "type": "string",
+              "description": "Date on which the book was loaned out",
+              "format": "date",
+              "example": "2020-03-22T00:00:00.000Z"
+            }
+          }
+        }
+      }
+    }
+  }
