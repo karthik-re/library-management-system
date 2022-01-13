@@ -697,9 +697,6 @@
             "bookAuthor": {
               "type": "string",
               "example": "Archer"
-            },
-            "bookStatus": {
-              "type": "boolean"
             }
           }
         },
@@ -713,10 +710,6 @@
             "bookAuthor": {
               "type": "string",
               "example": "Archer"
-            },
-            "bookStatus": {
-              "type": "boolean",
-              "description": "availability of book in library"
             }
           }
         },
