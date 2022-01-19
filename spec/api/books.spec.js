@@ -4,13 +4,7 @@ const request = supertest(app);
 
 describe("Books tests", () => {
 
-    //Validating Inputs and input Ids-----------------------------------------------------------
-    it("should validate book body", async () => {
-        const response = await request.post("/books").send({});
-        expect(response.statusCode).toBe(400);
-        expect(response.body.message).toBeDefined();
-        expect(response.body.message).toBe("Body is required");
-    });
+    //Validating Inputs and input Ids----------------------------------------------------------
 
     it("should validate the bookTitle", async ()=>{
         const response = await request.post("/books").send({
@@ -18,7 +12,7 @@ describe("Books tests", () => {
         });
         expect(response.statusCode).toBe(400);
         expect(response.body.message).toBeDefined();
-        expect(response.body.message).toBe("Title is required");
+        expect(response.body.message).toBe(`"bookTitle" is required`);
     })
 
     it("should validate the bookAuthor", async ()=>{
@@ -27,7 +21,7 @@ describe("Books tests", () => {
         });
         expect(response.statusCode).toBe(400);
         expect(response.body.message).toBeDefined();
-        expect(response.body.message).toBe("Author is required");
+        expect(response.body.message).toBe(`"bookAuthor" is required`);
     })
 
     it("should validate the Id inputed by the user",async ()=>{
