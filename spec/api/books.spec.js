@@ -1,8 +1,13 @@
 const supertest = require("supertest");
 const app = require("../../app");
 const request = supertest(app);
+const {connectToDB}  = require('../../database');
 
 describe("Books tests", () => {
+
+    beforeAll(async ()=>{
+        await connectToDB();
+    })
 
     //Validating Inputs and input Ids----------------------------------------------------------
 
@@ -35,7 +40,7 @@ describe("Books tests", () => {
         const bookId =response.body.bookId;
 
         const response2 = await request.get(`/books/${bookId+1}`);
-        expect(response2.statusCode).toBe(404);
+        expect(response2.statusCode).toBe(400);
         expect(response2.body.message).toBeDefined;
         expect(response2.body.message).toBe("Book not found. Please enter valid ID");
 
@@ -91,7 +96,7 @@ describe("Books tests", () => {
         const response3 = await request.get(`/books/${bookId}`);
         expect(response3.statusCode).toBe(200);
         expect(response3.body.bookId).toBe(bookId);
-        expect(response3.body.bookTitle).toBe("A Game of Thrones");
+        expect(response3.body.bookTitle).toBe("A Game of thrones");
         expect(response3.body.bookAuthor).toBe("George R R Martin");
     });
 
@@ -108,10 +113,10 @@ describe("Books tests", () => {
 
         const response2 = await request.delete(`/books/${bookId}`);
         expect(response2.statusCode).toBe(200);
-        expect(response.body).toBe("Book is deleted successfully");
+        expect(response2.text).toBe("Book is deleted successfully");
 
         const response3 = await request.get(`/books/${bookId}`);
-        expect(response.statusCode).toBe(404);
+        expect(response3.statusCode).toBe(400);
     });
 
     //GET /books----------------------------------------------------------------------------
