@@ -7,10 +7,13 @@ describe("Loans tests", () => {
 
     //Validating inputs and IDs-------------------------------------------------------------------------
     it("should validate outDate", async () => {
-        const response = await request.post("/loanHistory").send({});
+        const response = await request.post("/loanHistory").send({
+            bookId:10,
+            studentId:11
+        });
         expect(response.statusCode).toBe(400);
         expect(response.body.message).toBeDefined();
-        expect(response.body.message).toBe("outDate is required");
+        expect(response.body.message).toBe(`"outDate" is required`);
     });
 
     it("should validate the Id", async ()=>{

@@ -14,23 +14,4 @@ router.post("/",async (req,res,next)=>{
 })
 
 
-
 module.exports = router;
-
-
-/*
-const { Router } = require('express');
-const { createBook } = require('./modules');
-const route = Router();
-
-route.post('/', async (req, res, next) => {
-  try {
-    res.status(200).send(await createBook(req.body));
-  } catch (error) {
-    res.status(400).send({ message: error.message });
-  }
-});
-
-module.exports = route;
-
-*/

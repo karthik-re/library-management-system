@@ -9,7 +9,7 @@ describe("Students tests", () => {
         const response = await request.post("/student").send({});
         expect(response.statusCode).toBe(400);
         expect(response.body.message).toBeDefined();
-        expect(response.body.message).toBe("Name is required");
+        expect(response.body.message).toBe(`"studentName" is required`);
     });
 
     it("Should return the student by id", async () => {

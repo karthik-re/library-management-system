@@ -10,6 +10,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocumentation));
 
 
 app.use('/books',require('./books/router'));
+app.use('/student',require('./student/router'));
+app.use('/loanHistory',require('./loan/router'));
 
 app.get('/',(req,res)=>{
   res.status(200).send(`Welcome!. Please got to <a href="/api-docs">docs</a> to see swagger UI`)
