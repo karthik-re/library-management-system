@@ -1,8 +1,15 @@
 const supertest = require("supertest");
 const app = require("../../app");
 const request = supertest(app);
+const {connectToDB}  = require('../../database');
+
 
 describe("Students tests", () => {
+
+    beforeAll(async ()=>{
+        await connectToDB();
+    })
+
 
     //Should validate inputs and Ids--------------------------------------------------------------
     it("should validate student name", async () => {
@@ -12,7 +19,7 @@ describe("Students tests", () => {
         expect(response.body.message).toBe(`"studentName" is required`);
     });
 
-    it("Should return the student by id", async () => {
+    it("Should validate the ID", async () => {
         const response = await request.post("/student").send({
             studentName:"Jonny"
         });
@@ -22,7 +29,7 @@ describe("Students tests", () => {
         const studentId = response.body.studentId;
 
         const response2 = await request.get(`/student/${studentId+1}`);
-        expect(response2.statusCode).toBe(404);
+        expect(response2.statusCode).toBe(400);
         expect(response2.body.message).toBeDefined;
         expect(response2.body.message).toBe("Student not found. Please enter valid ID");
     });
@@ -86,16 +93,16 @@ describe("Students tests", () => {
 
         const response2 = await request.delete(`/student/${studentId}`);
         expect(response2.statusCode).toBe(200);
-        expect(response.body).toBe("Book is deleted successfully");
+        expect(response2.text).toBe("Student is deleted successfully");
 
         const response3 = await request.get(`/student/${studentId}`);
-        expect(response.statusCode).toBe(404);
+        expect(response3.statusCode).toBe(400);
     });
 
     //GET /student---------------------------------------------------------------------------------------
     it("Should get all the students", async ()=>{
         const response = await request.post("/student").send({
-            studentName: "A Clash of Kings"
+            studentName: "Jonny"
         });
         expect(response.statusCode).toBe(200);
         expect(response.body.studentId).toBeDefined();

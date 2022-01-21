@@ -1,10 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createBook } = require('./module');
-const {getBook}  = require('./module');
-const {updateBook}  = require('./module');
-const {deleteBook}  = require('./module');
-const {getAll}  = require('./module');
+const { createBook,getAll,getBook,deleteBook,updateBook } = require('./module');
 
 
 

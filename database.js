@@ -26,6 +26,22 @@ const Book = db.define('Book',{
 
 exports.Book = Book;
 
+const Student = db.define('Student',{
+    studentId: {
+        type:DataTypes.INTEGER,
+        primaryKey:true,
+        autoIncrement:true
+    },
+    studentName: {
+        type:DataTypes.STRING,
+        allowNull:false
+    }
+    },{
+    //other db options  
+});
+
+exports.Student = Student;
+
 exports.connectToDB = async function(){
     await db.authenticate();
     console.log("Database connection extablished");
