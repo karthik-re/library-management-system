@@ -120,9 +120,10 @@ describe("Students tests", () => {
 
         const response3 = await request.get("/student");
         expect(response3.statusCode).toBe(200);
-        expect(response3.body[0].studentName).toBe("Jonny");
-        expect(response3.body[0].studentId).toBe(studentId1);
-        expect(response3.body[1].studentName).toBe("John");
-        expect(response3.body[1].studentId).toBe(studentId2);
+        let g = response3.body.length
+        expect(response3.body[g-2].studentName).toBe("Jonny");
+        expect(response3.body[g-2].studentId).toBe(studentId1);
+        expect(response3.body[g-1].studentName).toBe("John");
+        expect(response3.body[g-1].studentId).toBe(studentId2);
     })
 })

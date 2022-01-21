@@ -157,16 +157,17 @@ describe("Loans tests", () => {
 
         const response3 = await request.get("/loanHistory");
         expect(response3.statusCode).toBe(200);
-        expect(response3.body[0].bookId).toBe(11);
-        expect(response3.body[0].studentId).toBe(10);
-        expect(response3.body[0].loanId).toBe(loanId1);
-        expect(response3.body[0].outDate).toBe("2020-03-22T00:00:00.000Z");
-        expect(response3.body[0].returnDate).toBe("2020-03-22T00:00:00.000Z");
-        expect(response3.body[1].bookId).toBe(10);
-        expect(response3.body[1].studentId).toBe(11);
-        expect(response3.body[1].loanId).toBe(loanId2);
-        expect(response3.body[1].outDate).toBe("2020-03-22T00:00:00.000Z");
-        expect(response3.body[1].returnDate).toBe("2020-03-22T00:00:00.000Z");
+        let g=response3.body.length;
+        expect(response3.body[g-2].bookId).toBe(11);
+        expect(response3.body[g-2].studentId).toBe(10);
+        expect(response3.body[g-2].loanId).toBe(loanId1);
+        expect(response3.body[g-2].outDate).toBe("2020-03-22T00:00:00.000Z");
+        expect(response3.body[g-2].returnDate).toBe("2020-03-22T00:00:00.000Z");
+        expect(response3.body[g-1].bookId).toBe(10);
+        expect(response3.body[g-1].studentId).toBe(11);
+        expect(response3.body[g-1].loanId).toBe(loanId2);
+        expect(response3.body[g-1].outDate).toBe("2020-03-22T00:00:00.000Z");
+        expect(response3.body[g-1].returnDate).toBe("2020-03-22T00:00:00.000Z");
     });
 
 })
