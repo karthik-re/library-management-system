@@ -2,8 +2,14 @@ const res = require("express/lib/response");
 const supertest = require("supertest");
 const app = require("../../app");
 const request = supertest(app);
+const {connectToDB}  = require('../../database');
+
 
 describe("History tests",()=>{
+
+    beforeAll(async ()=>{
+        await connectToDB();
+    })
     //GET /books/:id/history------------------------------------------------------------------------------------------------
     it("Should get the loan history of the book by its ID",async ()=>{
         const response0 = await request.post("/books").send({
@@ -58,10 +64,10 @@ describe("History tests",()=>{
         expect(res.statusCode).toBe(200);
         expect(res.body[0].loanId).toBe(loanId1);
         expect(res.body[1].loanId).toBe(loanId2);
-        expect(res.body[0].student.studentId).toBe(studentId1);
-        expect(res.body[1].student.studentId).toBe(studentId2);
-        expect(res.body[0].student.studentName).toBe("Jonny");
-        expect(res.body[1].student.studentName).toBe("John");
+        expect(res.body[0].studentId).toBe(studentId1);
+        expect(res.body[1].studentId).toBe(studentId2);
+        expect(res.body[0].studentName).toBe("Jonny");
+        expect(res.body[1].studentName).toBe("John");
         expect(res.body[0].outDate).toBe("2020-03-22T00:00:00.000Z");
         expect(res.body[1].outDate).toBe("2020-03-22T00:00:00.000Z");
         expect(res.body[0].returnDate).toBe("2020-03-22T00:00:00.000Z");
@@ -124,12 +130,12 @@ describe("History tests",()=>{
         expect(res.statusCode).toBe(200);
         expect(res.body[0].loanId).toBe(loanId1);
         expect(res.body[1].loanId).toBe(loanId2);
-        expect(res.body[0].book.bookId).toBe(bookId1);
-        expect(res.body[1].book.bookId).toBe(bookId2);
-        expect(res.body[0].book.bookTitle).toBe("A song of ice and fire");
-        expect(res.body[1].book.bookTitle).toBe("A Game of Thrones");
-        expect(res.body[0].book.bookAuthor).toBe("George R R Martin");
-        expect(res.body[1].book.bookAuthor).toBe("George R R Martin");
+        expect(res.body[0].bookId).toBe(bookId1);
+        expect(res.body[1].bookId).toBe(bookId2);
+        expect(res.body[0].bookTitle).toBe("A song of ice and fire");
+        expect(res.body[1].bookTitle).toBe("A Game of Thrones");
+        expect(res.body[0].bookAuthor).toBe("George R R Martin");
+        expect(res.body[1].bookAuthor).toBe("George R R Martin");
         expect(res.body[0].outDate).toBe("2020-03-22T00:00:00.000Z");
         expect(res.body[1].outDate).toBe("2020-03-22T00:00:00.000Z");
         expect(res.body[0].returnDate).toBe("2020-03-22T00:00:00.000Z");

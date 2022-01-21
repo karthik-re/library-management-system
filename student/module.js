@@ -1,5 +1,5 @@
 const schema  = require('./validation');
-const {Student} = require('./../database');
+const {Book,Student,Loan}  = require('./../database');
 
 async function createStudent(body) {
     
@@ -45,3 +45,25 @@ async function getAll(){
 }
 
 exports.getAll = getAll;
+
+//--------------------------HISTORY----------------------
+async function getHistory(id){
+  
+  const student = await Student.findByPk(id);
+  if(!student) throw new Error("Student not found. Please enter valid ID");
+  
+  let rawhistory = await Loan.findAll({where:{studentId:id}});
+  if(rawhistory.length === 0) throw new Error("No history exists for the student");
+
+  let history = JSON.parse(JSON.stringify(rawhistory));
+
+  for(let i=0;i<history.length;i++){
+    let book  = await Book.findByPk(history[i].bookId)
+    history[i].bookTitle = book.bookTitle;
+    history[i].bookAuthor = book.bookAuthor;
+  }
+
+  return history;
+}
+
+exports.getHistory = getHistory;
