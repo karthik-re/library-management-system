@@ -2,8 +2,14 @@ const res = require("express/lib/response");
 const supertest = require("supertest");
 const app = require("../../app");
 const request = supertest(app);
+const {connectToDB}  = require('../../database');
+
 
 describe("Loans tests", () => {
+
+    beforeAll(async ()=>{
+        await connectToDB();
+    })
 
     //Validating inputs and IDs-------------------------------------------------------------------------
     it("should validate outDate", async () => {
@@ -29,9 +35,9 @@ describe("Loans tests", () => {
         const loanId = response.body.loanId;
 
         const response2 = await request.get(`/loanHistory/${loanId+1}`);
-        expect(response2.statusCode).toBe(404);
+        expect(response2.statusCode).toBe(400);
         expect(response2.body.message).toBeDefined();
-        expect(response.body.message).toBe("Loan not found. Please enter valid ID")
+        expect(response2.body.message).toBe("Loan not found. Please enter valid ID")
     })
     
     //POST /loanHistory------------------------------------------------------------------------------------
@@ -118,10 +124,10 @@ describe("Loans tests", () => {
 
         const response2 = await request.delete(`/loanHistory/${loanId}`);
         expect(response2.statusCode).toBe(200);
-        expect(response.body).toBe("Book is deleted successfully");
+        expect(response2.text).toBe("Loan is deleted successfully");
 
         const response3 = await request.get(`/loanHistory/${loanId}`);
-        expect(response.statusCode).toBe(404);
+        expect(response3.statusCode).toBe(400);
     });
 
     //GET /loanHistory--------------------------------------------------------------------------------------------
@@ -156,8 +162,8 @@ describe("Loans tests", () => {
         expect(response3.body[0].loanId).toBe(loanId1);
         expect(response3.body[0].outDate).toBe("2020-03-22T00:00:00.000Z");
         expect(response3.body[0].returnDate).toBe("2020-03-22T00:00:00.000Z");
-        expect(response3.body[1].bookId).toBe("A song of ice and fire");
-        expect(response3.body[1].studentId).toBe("George R R Martin");
+        expect(response3.body[1].bookId).toBe(10);
+        expect(response3.body[1].studentId).toBe(11);
         expect(response3.body[1].loanId).toBe(loanId2);
         expect(response3.body[1].outDate).toBe("2020-03-22T00:00:00.000Z");
         expect(response3.body[1].returnDate).toBe("2020-03-22T00:00:00.000Z");

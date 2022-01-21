@@ -42,6 +42,34 @@ const Student = db.define('Student',{
 
 exports.Student = Student;
 
+const Loan = db.define('Loan',{
+    loanId: {
+        type:DataTypes.INTEGER,
+        primaryKey:true,
+        autoIncrement:true
+    },
+    bookId: {
+        type:DataTypes.INTEGER,
+        allowNull:false
+    },
+    studentId: {
+        type:DataTypes.INTEGER,
+        allowNull:false
+    },
+    outDate: {
+        type:DataTypes.DATE,
+        allowNull:false
+    },
+    returnDate: {
+        type:DataTypes.DATE,
+        allowNull:true
+    }
+    },{
+    //other db options  
+});
+
+exports.Loan = Loan;
+
 exports.connectToDB = async function(){
     await db.authenticate();
     console.log("Database connection extablished");
